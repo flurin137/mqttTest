@@ -1,0 +1,23 @@
+﻿<Window x:Class="MqttSniffer.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MqttSniffer.Views"
+        mc:Ignorable="d"
+        Title="MainView" Height="400" Width="400">
+    
+    <DockPanel  LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="2" Grid.Column="0" DockPanel.Dock="Left" x:Name="Topic"/>
+            <TextBox Margin="2" Grid.Column="1" DockPanel.Dock="Right" x:Name="Message"/>
+        </Grid>
+        <Button DockPanel.Dock="Bottom" Height="30" x:Name="SendMessage">Send Message</Button>
+        <TextBlock DockPanel.Dock="Top" x:Name="Output"/>
+    </DockPanel>
+    
+</Window>

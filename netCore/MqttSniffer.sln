@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttSniffer", "MqttSniffer\MqttSniffer.csproj", "{8E2DA57F-4AD8-4AE7-B91A-5E6974619E02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E2DA57F-4AD8-4AE7-B91A-5E6974619E02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2DA57F-4AD8-4AE7-B91A-5E6974619E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2DA57F-4AD8-4AE7-B91A-5E6974619E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2DA57F-4AD8-4AE7-B91A-5E6974619E02}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {130FBC4E-883A-4889-BCC6-A59F9B11B89B}
+	EndGlobalSection
+EndGlobal
