@@ -17,7 +17,19 @@
             <TextBox Margin="2" Grid.Column="1" DockPanel.Dock="Right" x:Name="Message"/>
         </Grid>
         <Button DockPanel.Dock="Bottom" Height="30" x:Name="SendMessage">Send Message</Button>
-        <TextBlock DockPanel.Dock="Top" x:Name="Output"/>
+        <ListView x:Name="Messages" DockPanel.Dock="Top">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn 
+                        DisplayMemberBinding="{Binding Path=Topic}" 
+                        Header="Topic"/>
+                    <GridViewColumn 
+                        DisplayMemberBinding="{Binding Path=Message}" 
+                        Header="Message"
+                        Width="auto"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </DockPanel>
     
 </Window>

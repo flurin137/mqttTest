@@ -1,27 +1,27 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Client.Options;
-using MQTTnet.Client.Subscribing;
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace MqttSniffer.Service
 {
-    interface IPublisher
+    internal interface IPublisher
     {
         Task Initialize();
         Task SendMessage(string topic, string message);
+
+        void SetMessageCallback(Action<MqttMessage> action);
     }
 
-    class Publisher : IPublisher
+    internal class MqttInteraction : IPublisher
     {
         private readonly string url;
         private IMqttClient mqttClient;
 
-        public Publisher(string url)
+        public MqttInteraction(string url)
         {
             this.url = url;
         }
@@ -34,15 +34,15 @@ namespace MqttSniffer.Service
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(url, 1883)
                 .Build();
-            
-            mqttClient.UseApplicationMessageReceivedHandler(e =>
-            {
-                Console.WriteLine($"+ Message = {e.ApplicationMessage.Topic} => {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-            });
 
             mqttClient.UseConnectedHandler(async e =>
             {
-                await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("FX/#").Build());
+                var topicFilters = new TopicFilterBuilder()
+                    .WithTopic("FX/FromNode")
+                    .WithTopic("FX/FromPython")
+                    .Build();
+
+                await mqttClient.SubscribeAsync(topicFilters);
             });
 
             await mqttClient.ConnectAsync(options, CancellationToken.None);
@@ -51,6 +51,12 @@ namespace MqttSniffer.Service
         public async Task SendMessage(string topic, string message)
         {
             await mqttClient.PublishAsync(topic, message);
+        }
+
+        public void SetMessageCallback(Action<MqttMessage> action)
+        {
+            mqttClient.UseApplicationMessageReceivedHandler(
+                e => action(new MqttMessage(e.ApplicationMessage.Topic, Encoding.UTF8.GetString(e.ApplicationMessage.Payload))));
         }
     }
 }

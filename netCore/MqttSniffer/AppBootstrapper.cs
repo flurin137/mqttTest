@@ -24,7 +24,7 @@ namespace MqttSniffer
             kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
             kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
 
-            var publisher = new Publisher("127.0.0.1");
+            var publisher = new MqttInteraction("127.0.0.1");
             publisher.Initialize();
 
             kernel.Bind<IPublisher>().ToConstant(publisher);
