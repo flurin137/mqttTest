@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/fxredeemer/mqttTest/issues"
   },
-  "homepage": "https://github.com/fxredeemer/mqttTest#readme"
+  "homepage": "https://github.com/fxredeemer/mqttTest#readme",
+  "dependencies": {
+    "mqtt": "^5.3.5"
+  }
 }
