@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MqttSniffer.Views"
+        xmlns:s="https://github.com/canton7/Stylet"
         mc:Ignorable="d"
         Title="MainView" Height="400" Width="400">
-    
-    <DockPanel  LastChildFill="True">
+    <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -16,8 +15,8 @@
             <TextBox Margin="2" Grid.Column="0" DockPanel.Dock="Left" x:Name="Topic"/>
             <TextBox Margin="2" Grid.Column="1" DockPanel.Dock="Right" x:Name="Message"/>
         </Grid>
-        <Button DockPanel.Dock="Bottom" Height="30" x:Name="SendMessage">Send Message</Button>
-        <ListView x:Name="Messages" DockPanel.Dock="Top">
+        <Button DockPanel.Dock="Bottom" Height="30" Command="{s:Action SendMessage}" >Send Message</Button>
+        <ListView  s:View.Model="{Binding Messages}" DockPanel.Dock="Top">
             <ListView.View>
                 <GridView>
                     <GridViewColumn 

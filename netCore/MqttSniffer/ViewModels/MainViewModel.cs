@@ -1,52 +1,49 @@
-﻿using Caliburn.Micro;
-using MqttSniffer.Service;
+﻿using MqttSniffer.Service;
+using Stylet;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
-namespace MqttSniffer.ViewModels
+namespace MqttSniffer.ViewModels;
+
+internal interface IMainViewModel
 {
-    internal interface IMainViewModel
+    string Output { get; set; }
+    string Message { get; set; }
+    string Topic { get; set; }
+    ObservableCollection<MqttMessage> Messages { get; }
+    Task SendMessage();
+}
+
+internal class MainViewModel : Screen, IMainViewModel
+{
+    private string console = "";
+    private readonly IPublisher publisher;
+
+    public string Output
     {
-        string Output { get; set; }
-        string Message { get; set; }
-        string Topic { get; set; }
-        ObservableCollection<MqttMessage> Messages { get; }
-        Task SendMessage();
+        get => console; set
+        {
+            console = value;
+            NotifyOfPropertyChange();
+        }
     }
 
-    internal class MainViewModel : Screen, IMainViewModel
+    public string Message { get; set; } = "message";
+    public string Topic { get; set; } = "FX/FromCSharp";
+    public ObservableCollection<MqttMessage> Messages { get; } = [];
+
+    public MainViewModel(IPublisher publisher)
     {
-        private string console;
-        private readonly IPublisher publisher;
+        this.publisher = publisher;
+        publisher.SetMessageCallback(ShowMessage);
+    }
 
-        public string Output
-        {
-            get => console; set
-            {
-                console = value;
-                NotifyOfPropertyChange();
-            }
-        }
+    private void ShowMessage(MqttMessage message)
+    {
+        App.Current.Dispatcher.Invoke(() => Messages.Add(message));
+    }
 
-        public string Message { get; set; } = "message";
-        public string Topic { get; set; } = "FX/FromCSharp";
-        public ObservableCollection<MqttMessage> Messages { get; } = new ObservableCollection<MqttMessage>();
-
-        public MainViewModel(IPublisher publisher)
-        {
-            this.publisher = publisher;
-            publisher.SetMessageCallback(ShowMessage);
-        }
-
-        private void ShowMessage(MqttMessage message)
-        {
-            App.Current.Dispatcher.Invoke(() => Messages.Add(message));
-        }
-
-        public async Task SendMessage()
-        {
-            await publisher.SendMessage(Topic, Message);
-        }
+    public async Task SendMessage()
+    {
+        await publisher.SendMessage(Topic, Message);
     }
 }

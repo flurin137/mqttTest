@@ -1,66 +1,22 @@
-﻿using Caliburn.Micro;
-using MqttSniffer.Service;
+﻿using MqttSniffer.Service;
 using MqttSniffer.ViewModels;
-using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Windows;
+using Stylet;
+using StyletIoC;
 
-namespace MqttSniffer
+namespace MqttSniffer;
+
+internal class AppBootstrapper : Bootstrapper<MainViewModel>
 {
-    public class AppBootstrapper : BootstrapperBase
+    protected override void ConfigureIoC(IStyletIoCBuilder builder)
     {
-        private IKernel kernel;
+        builder.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
+        builder.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
 
-        public AppBootstrapper()
-        {
-            Initialize();
-        }
+        var publisher = new MqttInteraction("127.0.0.1");
+        publisher.Initialize().Wait();
 
-        protected override void Configure()
-        {
-            kernel = new StandardKernel();
-            
-            kernel.Bind<IWindowManager>().To<WindowManager>().InSingletonScope();
-            kernel.Bind<IEventAggregator>().To<EventAggregator>().InSingletonScope();
+        builder.Bind<IPublisher>().ToInstance(publisher);
 
-            var publisher = new MqttInteraction("127.0.0.1");
-            publisher.Initialize();
-
-            kernel.Bind<IPublisher>().ToConstant(publisher);
-
-            kernel.Bind<IMainViewModel>().To<MainViewModel>();
-        }
-
-        protected override object GetInstance(Type service, string key)
-        {
-            if (service == null)
-            {
-                throw new ArgumentNullException(nameof(service));
-            }
-
-            return kernel.Get(service);
-        }
-
-        protected override IEnumerable<object> GetAllInstances(Type service)
-        {
-            return kernel.GetAll(service);
-        }
-
-        protected override void BuildUp(object instance)
-        {
-            kernel.Inject(instance);
-        }
-
-        protected override void OnStartup(object sender, StartupEventArgs e)
-        {
-            DisplayRootViewFor<MainViewModel>();
-        }
-
-        protected override void OnExit(object sender, EventArgs e)
-        {
-            kernel.Dispose();
-            base.OnExit(sender, e);
-        }
+        builder.Bind<IMainViewModel>().To<MainViewModel>();
     }
 }
